@@ -85,6 +85,8 @@ class UrlTest extends PHPUnit_Framework_TestCase
   {
     $cases = [];
 
+    $cases[] = ['relative' => 'http://0:0@a/b/c/g', 'result' => 'http://a/b/c/g'];
+    $cases[] = ['relative' => 'http://0.0:0.0@a:8080/b/c/g', 'result' => 'http://a:8080/b/c/g'];
     $cases[] = ['relative' => 'http://a1:a2@a:8080/b/c/g', 'result' => 'http://a1:a2@a:8080/b/c/g'];
     $cases[] = ['relative' => 'g', 'result' => 'http://a/b/c/g'];
     $cases[] = ['relative' => './g', 'result' => 'http://a/b/c/g'];

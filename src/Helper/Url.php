@@ -65,56 +65,86 @@ class Url
    */
   public static function combine($theUri, $theRelativeUri)
   {
-    $Uri         = parse_url($theUri);
-    $RelativeUri = parse_url($theRelativeUri);
+    $_uri         = parse_url($theUri);
+    $_relativeUri = parse_url($theRelativeUri);
 
-    switch (true)
+    if (!empty($_relativeUri['scheme']) || !empty($_relativeUri['host']))
     {
-      case !empty($RelativeUri['scheme']) || !empty($RelativeUri['host']):
-        break;
-      case empty($RelativeUri['path']):
-        $RelativeUri['path'] = self::normalize_path($Uri['path']);
-        if (empty($RelativeUri['query']))
-        {
-          $RelativeUri['query'] = $Uri['query'];
-        }
-        break;
-      case strpos($RelativeUri['path'], '/')===0:
-        break;
-      default:
-        $path = $Uri['path'];
-        if (strpos($path, '/')===false)
-        {
-          $path = '';
-        }
-        else
-        {
-          $path = preg_replace('/\/[^\/]+$/', '/', $path);
-        }
-        if (empty($path) && empty($Uri['host']))
-        {
-          $path = '/';
-        }
-        $RelativeUri['path'] = self::normalize_path($path.$RelativeUri['path']);
+      /**
+       * Checking scheme or host in $_relativeUri and if one of they not empty, do nothing.
+       */
     }
-    if (empty($RelativeUri['scheme']))
+    elseif (empty($_relativeUri['path']))
     {
-      $RelativeUri['scheme'] = $Uri['scheme'];
-      if (empty($RelativeUri['host']))
+      /**
+       * Checking path in $_relativeUri and if path is empty, getting path from $_uri using [normalize_path]
+       */
+      $_relativeUri['path'] = self::normalize_path($_uri['path']);
+      if (empty($_relativeUri['query']))
       {
-        $RelativeUri['host'] = $Uri['host'];
+        $_relativeUri['query'] = $_uri['query'];
       }
     }
-    if(empty($RelativeUri['user'])){$RelativeUri['user'] = !empty($Uri['user']) ? $Uri['user'] : '';}
-    if(empty($RelativeUri['pass'])){$RelativeUri['pass'] = !empty($Uri['pass']) ? $Uri['pass'] : '';}
-    if(empty($RelativeUri['port'])){$RelativeUri['port'] = !empty($Uri['port']) ? $Uri['port'] : '';}
+    elseif (strpos($_relativeUri['path'], '/')===0)
+    {
+      /**
+       * Checking path in $_relativeUri and if path have '/', do nothing.
+       */
+    }
+    else
+    {
+      /**
+       * Else create path using $_uri['path'] and $_relativeUri['path'].
+       * With using [normalize_path].
+       */
+      $_path = $_uri['path'];
+      if (strpos($_path, '/')===false)
+      {
+        $_path = '';
+      }
+      else
+      {
+        $_path = preg_replace('/\/[^\/]+$/', '/', $_path);
+      }
+      if (empty($_path) && empty($_uri['host']))
+      {
+        $_path = '/';
+      }
+      $_relativeUri['path'] = self::normalize_path($_path.$_relativeUri['path']);
+    }
+    if (empty($_relativeUri['scheme']))
+    {
+      /**
+       * Checking scheme and host in $_relativeUri and if they are empty, get from $_uri.
+       */
+      $_relativeUri['scheme'] = $_uri['scheme'];
+      if (empty($_relativeUri['host']))
+      {
+        $_relativeUri['host'] = $_uri['host'];
+      }
+    }
+    /**
+     * Checking user,pass and port in $_relativeUri and if they are empty, get from $_uri.
+     */
+    if (empty($_relativeUri['user']) || $_relativeUri['user']=='0' || $_relativeUri['user']=='0.0')
+    {
+      $_relativeUri['user'] = !empty($_uri['user']) && $_uri['user']!='0' && $_uri['user']!='0.0' ? $_uri['user'] : '';
+    }
+    if (empty($_relativeUri['pass']) || $_relativeUri['pass']=='0' || $_relativeUri['pass']=='0.0')
+    {
+      $_relativeUri['pass'] = !empty($_uri['pass']) && $_uri['pass']!='0' && $_uri['pass']!='0.0' ? $_uri['pass'] : '';
+    }
+    if (empty($_relativeUri['port']) || $_relativeUri['port']=='0' || $_relativeUri['port']=='0.0')
+    {
+      $_relativeUri['port'] = !empty($_uri['port']) && $_uri['port']!='0' && $_uri['port']!='0.0' ? $_uri['port'] : '';
+    }
 
-    return self::unparse_url($RelativeUri);
+    return self::unparse_url($_relativeUri);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Get parsed_url from parse_url('Url') and return full Url
+   * Get parsed_url from [parse_url] and return full Url
    *
    * @param Array $parsed_url
    *
@@ -149,14 +179,14 @@ class Url
     {
       return '';
     }
-    $normalized_path = $path;
-    $normalized_path = preg_replace('`//+`', '/', $normalized_path, -1, $c0);
-    $normalized_path = preg_replace('`^/\\.\\.?/`', '/', $normalized_path, -1, $c1);
-    $normalized_path = preg_replace('`/\\.(/|$)`', '/', $normalized_path, -1, $c2);
-    $normalized_path = preg_replace('`/[^/]*?/\\.\\.(/|$)`', '/', $normalized_path, 1, $c3);
-    $num_matches     = $c0 + $c1 + $c2 + $c3;
+    $_normalized_path = $path;
+    $_normalized_path = preg_replace('`//+`', '/', $_normalized_path, -1, $c0);
+    $_normalized_path = preg_replace('`^/\\.\\.?/`', '/', $_normalized_path, -1, $c1);
+    $_normalized_path = preg_replace('`/\\.(/|$)`', '/', $_normalized_path, -1, $c2);
+    $_normalized_path = preg_replace('`/[^/]*?/\\.\\.(/|$)`', '/', $_normalized_path, 1, $c3);
+    $_num_matches     = $c0 + $c1 + $c2 + $c3;
 
-    return ($num_matches>0) ? self::normalize_path($normalized_path) : $normalized_path;
+    return ($_num_matches>0) ? self::normalize_path($_normalized_path) : $_normalized_path;
   }
 }
 
