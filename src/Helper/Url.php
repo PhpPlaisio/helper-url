@@ -58,111 +58,123 @@ class Url
   /**
    * Combine URL and RelativeURL to single URL and return.
    *
-   * @param string $theUri         The part of the URLs before the path part without slash.
-   * @param string $theRelativeUri The path part of the URLs.
+   * @param string $theUri1 The part of the URLs before the path part without slash.
+   * @param string $theUr2  The path part of the URLs.
    *
    * @return string
    */
-  public static function combine($theUri, $theRelativeUri)
+  public static function combine($theUri1, $theUr2)
   {
-    $_uri         = parse_url($theUri);
-    $_relativeUri = parse_url($theRelativeUri);
+    $uri2_parts = parse_url($theUr2);
+    if (isset($uri2_parts['scheme']) || isset($uri2_parts['host']))
+    {
+      // The second URI is an absolute URI. Take all parts from second URI.
+      $combined_uri_parts = $uri2_parts;
 
-    if (!empty($_relativeUri['scheme']) || !empty($_relativeUri['host']))
-    {
-      /**
-       * Checking scheme or host in $_relativeUri and if one of they not empty, do nothing.
-       */
-    }
-    elseif (empty($_relativeUri['path']))
-    {
-      /**
-       * Checking path in $_relativeUri and if path is empty, getting path from $_uri using [normalize_path]
-       */
-      $_relativeUri['path'] = self::normalize_path($_uri['path']);
-      if (empty($_relativeUri['query']))
-      {
-        $_relativeUri['query'] = $_uri['query'];
-      }
-    }
-    elseif (strpos($_relativeUri['path'], '/')===0)
-    {
-      /**
-       * Checking path in $_relativeUri and if path have '/', do nothing.
-       */
+      // The scheme might by omitted. The default scheme is http.
+      if (!isset($combined_uri_parts['scheme'])) $combined_uri_parts['scheme'] = 'http';
     }
     else
     {
-      /**
-       * Else create path using $_uri['path'] and $_relativeUri['path'].
-       * With using [normalize_path].
-       */
-      $_path = $_uri['path'];
-      if (strpos($_path, '/')===false)
+      $uri1_parts         = parse_url($theUri1);
+      $combined_uri_parts = array_merge($uri1_parts, $uri2_parts);
+
+      // Handle spacial cases for the path part of the URI.
+      if (!isset($uri2_parts['path']))
       {
-        $_path = '';
+        // Checking path in $uri2_parts and if path is empty, getting path from $_uri using [normalize_path]
+        $combined_uri_parts['path'] = self::normalize_path($uri1_parts['path']);
+      }
+      elseif (strpos($uri2_parts['path'], '/')===0)
+      {
+        // Checking path in $uri2_parts and if path have '/', do nothing.
       }
       else
       {
-        $_path = preg_replace('/\/[^\/]+$/', '/', $_path);
+        // Else create path using $_uri['path'] and $uri2_parts['path'].With using [normalize_path].
+        $_path = $uri1_parts['path'];
+        if (strpos($_path, '/')===false)
+        {
+          $_path = '';
+        }
+        else
+        {
+          $_path = preg_replace('/\/[^\/]+$/', '/', $_path);
+        }
+        if (!isset($_path) && !isset($uri1_parts['host']))
+        {
+          $_path = '/';
+        }
+        $combined_uri_parts['path'] = self::normalize_path($_path.$uri2_parts['path']);
       }
-      if (empty($_path) && empty($_uri['host']))
+
+      // Handle spacial cases for the query part of the URI.
+      if (!isset($uri2_parts['path']))
       {
-        $_path = '/';
+        if (!isset($uri2_parts['query']))
+        {
+          $combined_uri_parts['query'] = $uri1_parts['query'];
+        }
       }
-      $_relativeUri['path'] = self::normalize_path($_path.$_relativeUri['path']);
-    }
-    if (empty($_relativeUri['scheme']))
-    {
-      /**
-       * Checking scheme and host in $_relativeUri and if they are empty, get from $_uri.
-       */
-      $_relativeUri['scheme'] = $_uri['scheme'];
-      if (empty($_relativeUri['host']))
+      elseif (strpos($uri2_parts['path'], '/')===0)
       {
-        $_relativeUri['host'] = $_uri['host'];
+        if (isset($uri2_parts['query']))
+        {
+          $combined_uri_parts['query'] = $uri2_parts['query'];
+        }
+        else
+        {
+          $combined_uri_parts['query'] = '';
+        }
       }
-    }
-    /**
-     * Checking user,pass and port in $_relativeUri and if they are empty, get from $_uri.
-     */
-    if (empty($_relativeUri['user']) || $_relativeUri['user']=='0' || $_relativeUri['user']=='0.0')
-    {
-      $_relativeUri['user'] = !empty($_uri['user']) && $_uri['user']!='0' && $_uri['user']!='0.0' ? $_uri['user'] : '';
-    }
-    if (empty($_relativeUri['pass']) || $_relativeUri['pass']=='0' || $_relativeUri['pass']=='0.0')
-    {
-      $_relativeUri['pass'] = !empty($_uri['pass']) && $_uri['pass']!='0' && $_uri['pass']!='0.0' ? $_uri['pass'] : '';
-    }
-    if (empty($_relativeUri['port']) || $_relativeUri['port']=='0' || $_relativeUri['port']=='0.0')
-    {
-      $_relativeUri['port'] = !empty($_uri['port']) && $_uri['port']!='0' && $_uri['port']!='0.0' ? $_uri['port'] : '';
+      else
+      {
+        if (isset($uri2_parts['query']))
+        {
+          $combined_uri_parts['query'] = $uri2_parts['query'];
+        }
+        else
+        {
+          $combined_uri_parts['query'] = '';
+        }
+      }
+
+      // xxx dima
     }
 
-    return self::unparse_url($_relativeUri);
+    return self::unparse_url($combined_uri_parts);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Get parsed_url from [parse_url] and return full Url
    *
-   * @param Array $parsed_url
+   * @param $parsed
    *
    * @return string
+   *
    */
-  public static function unparse_url($parsed_url)
+  public static function unparse_url($parsed)
   {
-    $scheme   = !empty($parsed_url['scheme']) ? "{$parsed_url['scheme']}://" : '';
-    $host     = !empty($parsed_url['host']) ? $parsed_url['host'] : '';
-    $port     = !empty($parsed_url['port']) ? ":{$parsed_url['port']}" : '';
-    $user     = !empty($parsed_url['user']) ? $parsed_url['user'] : '';
-    $pass     = !empty($parsed_url['pass']) ? ":{$parsed_url['pass']}" : '';
-    $pass     = ($user || $pass) ? "{$pass}@" : '';
-    $path     = !empty($parsed_url['path']) ? $parsed_url['path'] : '';
-    $query    = !empty($parsed_url['query']) ? "?{$parsed_url['query']}" : '';
-    $fragment = !empty($parsed_url['fragment']) ? "#{$parsed_url['fragment']}" : '';
+    $scheme   =& $parsed['scheme'];
+    $host     =& $parsed['host'];
+    $port     =& $parsed['port'];
+    $user     =& $parsed['user'];
+    $pass     =& $parsed['pass'];
+    $path     =& $parsed['path'];
+    $query    =& $parsed['query'];
+    $fragment =& $parsed['fragment'];
 
-    return "$scheme$user$pass$host$port$path$query$fragment";
+    $userinfo  = !strlen($pass) ? $user : "$user:$pass";
+    $host      = !"$port" ? $host : "$host:$port";
+    $authority = !strlen($userinfo) ? $host : "$userinfo@$host";
+    $hier_part = !strlen($authority) ? $path : "//$authority$path";
+    $url       = !strlen($scheme) ? $hier_part : "$scheme:$hier_part";
+    $url       = !strlen($query) ? $url : "$url?$query";
+    $url       = !strlen($fragment) ? $url : "$url#$fragment";
+
+    // xxx dima the first implementation of unparse_url
+    return $url;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
