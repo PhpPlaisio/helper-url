@@ -83,7 +83,7 @@ class Url
       if (!isset($uri2_parts['path']))
       {
         // Checking path in $uri2_parts and if path is empty, getting path from $_uri using [normalize_path]
-        $combined_uri_parts['path'] = self::normalize_path($uri1_parts['path']);
+        $combined_uri_parts['path'] = self::normalizePath($uri1_parts['path']);
       }
       elseif (strpos($uri2_parts['path'], '/')===0)
       {
@@ -105,7 +105,7 @@ class Url
         {
           $_path = '/';
         }
-        $combined_uri_parts['path'] = self::normalize_path($_path.$uri2_parts['path']);
+        $combined_uri_parts['path'] = self::normalizePath($_path.$uri2_parts['path']);
       }
 
       // Handle spacial cases for the query part of the URI.
@@ -124,7 +124,7 @@ class Url
         }
         else
         {
-          $combined_uri_parts['query'] = '';
+          $combined_uri_parts['query'] = null;
         }
       }
       else
@@ -135,70 +135,59 @@ class Url
         }
         else
         {
-          $combined_uri_parts['query'] = '';
+          $combined_uri_parts['query'] = null;
         }
       }
-
-      // xxx dima
     }
 
-    return self::unparse_url($combined_uri_parts);
+    return self::unparseUrl($combined_uri_parts);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Get parsed_url from [parse_url] and return full Url
+   * Creates a complete Url from parts of $theParsedUrl
    *
-   * @param $parsed
+   * @param array $theParsedUrl
    *
    * @return string
-   *
    */
-  public static function unparse_url($parsed)
+  private static function unparseUrl($theParsedUrl)
   {
-    $scheme   =& $parsed['scheme'];
-    $host     =& $parsed['host'];
-    $port     =& $parsed['port'];
-    $user     =& $parsed['user'];
-    $pass     =& $parsed['pass'];
-    $path     =& $parsed['path'];
-    $query    =& $parsed['query'];
-    $fragment =& $parsed['fragment'];
+    $scheme   = isset($theParsedUrl['scheme']) ? $theParsedUrl['scheme'] . '://' : '';
+    $host     = isset($theParsedUrl['host']) ? $theParsedUrl['host'] : '';
+    $port     = isset($theParsedUrl['port']) ? ':' .$theParsedUrl['port'] : '';
+    $user     = isset($theParsedUrl['user']) ? $theParsedUrl['user'] : '';
+    $pass     = isset($theParsedUrl['pass']) ? ':' .$theParsedUrl['pass']  : '';
+    $pass     = ($user || $pass) ? "$pass@" : '';
+    $path     = isset($theParsedUrl['path']) ? $theParsedUrl['path'] : '';
+    $query    = isset($theParsedUrl['query']) ? '?' .$theParsedUrl['query'] : '';
+    $fragment = isset($theParsedUrl['fragment']) ? '#' .$theParsedUrl['fragment'] : '';
 
-    $userinfo  = !strlen($pass) ? $user : "$user:$pass";
-    $host      = !"$port" ? $host : "$host:$port";
-    $authority = !strlen($userinfo) ? $host : "$userinfo@$host";
-    $hier_part = !strlen($authority) ? $path : "//$authority$path";
-    $url       = !strlen($scheme) ? $hier_part : "$scheme:$hier_part";
-    $url       = !strlen($query) ? $url : "$url?$query";
-    $url       = !strlen($fragment) ? $url : "$url#$fragment";
-
-    // xxx dima the first implementation of unparse_url
-    return $url;
+    return "$scheme$user$pass$host$port$path$query$fragment";
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Normalize path to format with slashes only
    *
-   * @param string $path
+   * @param string $thePath
    *
    * @return string
    */
-  public static function normalize_path($path)
+  public static function normalizePath($thePath)
   {
-    if (empty($path))
+    if (empty($thePath))
     {
       return '';
     }
-    $_normalized_path = $path;
-    $_normalized_path = preg_replace('`//+`', '/', $_normalized_path, -1, $c0);
-    $_normalized_path = preg_replace('`^/\\.\\.?/`', '/', $_normalized_path, -1, $c1);
-    $_normalized_path = preg_replace('`/\\.(/|$)`', '/', $_normalized_path, -1, $c2);
-    $_normalized_path = preg_replace('`/[^/]*?/\\.\\.(/|$)`', '/', $_normalized_path, 1, $c3);
+    $normalized_path = $thePath;
+    $normalized_path = preg_replace('`//+`', '/', $normalized_path, -1, $c0);
+    $normalized_path = preg_replace('`^/\\.\\.?/`', '/', $normalized_path, -1, $c1);
+    $normalized_path = preg_replace('`/\\.(/|$)`', '/', $normalized_path, -1, $c2);
+    $normalized_path = preg_replace('`/[^/]*?/\\.\\.(/|$)`', '/', $normalized_path, 1, $c3);
     $_num_matches     = $c0 + $c1 + $c2 + $c3;
 
-    return ($_num_matches>0) ? self::normalize_path($_normalized_path) : $_normalized_path;
+    return ($_num_matches>0) ? self::normalizePath($normalized_path) : $normalized_path;
   }
 }
 
