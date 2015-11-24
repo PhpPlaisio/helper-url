@@ -83,6 +83,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
    */
   public function testcombine()
   {
+    // With thanks to monkeysuffrage, see https://github.com/monkeysuffrage/phpuri/blob/master/test.php.
     $cases = [];
 
     $cases[] = ['relative' => 'http://0:0@a/b/c/g', 'result' => 'http://0:0@a/b/c/g'];
