@@ -167,7 +167,7 @@ class Url
   public static function relative2Absolute($theHtml, $theRoot)
   {
     return preg_replace("#(href|src)=(['\"])([^:'\"]*)(['\"]|(?:(?:%20|\\s|\\+)[^'\"]*))#",
-                        "$1=$2".$theRoot."$3$4",
+                        '$1=$2'.$theRoot.'$3$4',
                         $theHtml);
   }
 
@@ -193,7 +193,7 @@ class Url
     $query    = isset($theParts['query']) ? '?'.$theParts['query'] : '';
     $fragment = isset($theParts['fragment']) ? '#'.$theParts['fragment'] : '';
 
-    return "$scheme$user$pass$host$port$path$query$fragment";
+    return $scheme.$user.$pass.$host.$port.$path.$query.$fragment;
   }
 }
 
