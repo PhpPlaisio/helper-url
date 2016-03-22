@@ -179,21 +179,68 @@ class Url
    *
    * @return string
    */
-  private static function unParseUrl($theParts)
+  public static function unParseUrl($theParts)
   {
-    // With thanks to thomas@gielfeldt.com, see http://php.net/manual/function.parse-url.php.
+    if (!isset($theParts['scheme']) && !isset($theParts['host']) && isset($theParts['path']))
+    {
+      $i = strpos($theParts['path'], '/');
+      if ($i===false)
+      {
+        $theParts['host'] = $theParts['path'];
+        unset($theParts['path']);
+      }
+      else
+      {
 
-    $scheme   = isset($theParts['scheme']) ? $theParts['scheme'].'://' : '';
-    $host     = isset($theParts['host']) ? $theParts['host'] : '';
-    $port     = isset($theParts['port']) ? ':'.$theParts['port'] : '';
-    $user     = isset($theParts['user']) ? $theParts['user'] : '';
-    $pass     = isset($theParts['pass']) ? ':'.$theParts['pass'] : '';
-    $pass     = ($user || $pass) ? "$pass@" : '';
-    $path     = isset($theParts['path']) ? $theParts['path'] : '';
-    $query    = isset($theParts['query']) ? '?'.$theParts['query'] : '';
-    $fragment = isset($theParts['fragment']) ? '#'.$theParts['fragment'] : '';
+        $theParts['host'] = substr($theParts['path'], 0, $i);
+        $theParts['path'] = substr($theParts['path'], $i);
+      }
+    }
 
-    return $scheme.$user.$pass.$host.$port.$path.$query.$fragment;
+    if (empty($theParts['scheme']))
+    {
+      // The default scheme is 'http'.
+      $theParts['scheme'] = 'http';
+    }
+    else
+    {
+      // The scheme must be in lowercase.
+      $theParts['scheme'] = strtolower($theParts['scheme']);
+    }
+
+    // We assume that all URLs must have a path except for 'mailto'.
+    if (!isset($theParts['path']) && $theParts['scheme']!='mailto')
+    {
+      $theParts['path'] = '/';
+    }
+
+    // Recompose the URL starting with the scheme.
+    if ($theParts['scheme']=='mailto')
+    {
+      $url = 'mailto:';
+    }
+    else
+    {
+      $url = $theParts['scheme'];
+      $url .= '://';
+    }
+
+    if (isset($theParts['pass']) && isset($theParts['user']))
+    {
+      $url .= $theParts['user'].':'.$theParts['pass'].'@';
+    }
+    elseif (isset($theParts['user']))
+    {
+      $url .= $theParts['user'].'@';
+    }
+
+    if (isset($theParts['host'])) $url .= $theParts['host'];
+    if (isset($theParts['port'])) $url .= ':'.$theParts['port'];
+    if (isset($theParts['path'])) $url .= $theParts['path'];
+    if (isset($theParts['query'])) $url .= '?'.$theParts['query'];
+    if (isset($theParts['fragment'])) $url .= '#'.$theParts['fragment'];
+
+    return $url;
   }
 }
 

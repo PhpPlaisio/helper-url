@@ -93,7 +93,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
     $cases[] = ['relative' => './g', 'result' => 'http://a/b/c/g'];
     $cases[] = ['relative' => 'g/', 'result' => 'http://a/b/c/g/'];
     $cases[] = ['relative' => '/g', 'result' => 'http://a/g'];
-    $cases[] = ['relative' => '//g', 'result' => 'http://g'];
+    $cases[] = ['relative' => '//g', 'result' => 'http://g/'];
     $cases[] = ['relative' => 'g?y', 'result' => 'http://a/b/c/g?y'];
     $cases[] = ['relative' => '#s', 'result' => 'http://a/b/c/d;p?q#s'];
     $cases[] = ['relative' => 'g#s', 'result' => 'http://a/b/c/g#s'];
