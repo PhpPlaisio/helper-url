@@ -46,7 +46,7 @@ class Url
       }
       else
       {
-        // Else create path using $_uri['path'] and $uri2_parts['path'].With using [normalize_path].
+        // Else create path using $_uri['path'] and $uri2_parts['path']. With using [normalize_path].
         $_path = $parts1['path'];
         if (strpos($_path, '/')===false)
         {
