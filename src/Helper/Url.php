@@ -175,11 +175,12 @@ class Url
   /**
    * Returns an URL based on the URL parts as returned by [parse_url](http://php.net/manual/function.parse-url.php).
    *
-   * @param array $theParts The URL parts.
+   * @param array       $theParts         The URL parts.
+   * @param string|null $theDefaultScheme The scheme to be used when scheme is not in $theParts.
    *
    * @return string
    */
-  public static function unParseUrl($theParts)
+  public static function unParseUrl($theParts, $theDefaultScheme = null)
   {
     if (!isset($theParts['scheme']) && !isset($theParts['host']) && isset($theParts['path']))
     {
@@ -191,38 +192,43 @@ class Url
       }
       else
       {
-
         $theParts['host'] = substr($theParts['path'], 0, $i);
         $theParts['path'] = substr($theParts['path'], $i);
       }
     }
 
-    if (empty($theParts['scheme']))
-    {
-      // The default scheme is 'http'.
-      $theParts['scheme'] = 'http';
-    }
-    else
+    if (isset($theParts['scheme']))
     {
       // The scheme must be in lowercase.
       $theParts['scheme'] = strtolower($theParts['scheme']);
     }
+    elseif (isset($theDefaultScheme))
+    {
+      $theParts['scheme'] = strtolower($theDefaultScheme);
+    }
 
     // We assume that all URLs must have a path except for 'mailto'.
-    if (!isset($theParts['path']) && $theParts['scheme']!='mailto')
+    if (!isset($theParts['path']) && isset($theParts['scheme']) && $theParts['scheme']!='mailto')
     {
       $theParts['path'] = '/';
     }
 
     // Recompose the URL starting with the scheme.
-    if ($theParts['scheme']=='mailto')
+    if (isset($theParts['scheme']))
     {
-      $url = 'mailto:';
+      if ($theParts['scheme']=='mailto')
+      {
+        $url = 'mailto:';
+      }
+      else
+      {
+        $url = $theParts['scheme'];
+        $url .= '://';
+      }
     }
     else
     {
-      $url = $theParts['scheme'];
-      $url .= '://';
+      $url = '';
     }
 
     if (isset($theParts['pass']) && isset($theParts['user']))

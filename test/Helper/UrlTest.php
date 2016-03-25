@@ -81,7 +81,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
   /**
    * Test for combine.
    */
-  public function testcombine()
+  public function testCombine()
   {
     // With thanks to monkeysuffrage, see https://github.com/monkeysuffrage/phpuri/blob/master/test.php.
     $cases = [];
