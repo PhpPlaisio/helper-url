@@ -21,6 +21,10 @@ class Url
   public static function combine($theUri1, $theUri2)
   {
     $parts2 = parse_url($theUri2);
+    if (!is_array($parts2))
+    {
+      print_r("Parts2 not array");
+    }
     if (isset($parts2['scheme']) || isset($parts2['host']))
     {
       // The second URI is an absolute URI. Take all parts from second URI.
@@ -31,7 +35,7 @@ class Url
     }
     else
     {
-      $parts1             = parse_url($theUri1);
+      $parts1 = parse_url($theUri1);
       $combined_uri_parts = array_merge($parts1, $parts2);
 
       // Handle spacial cases for the path part of the URI.
