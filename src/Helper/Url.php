@@ -36,8 +36,11 @@ class Url
     }
     else
     {
-      $parts1             = parse_url($theUri1);
-      $combined_uri_parts = array_merge($parts1, $parts2);
+      $parts1 = parse_url($theUri1);
+      if (is_array($parts1) && is_array($parts2))
+      {
+        $combined_uri_parts = array_merge($parts1, $parts2);
+      }
 
       // Handle spacial cases for the path part of the URI.
       if (!isset($parts2['path']))
