@@ -23,7 +23,8 @@ class Url
     $parts2 = parse_url($theUri2);
     if (!is_array($parts2))
     {
-      print_r("Parts2 not array");
+      print_r("\nParts2 not array\n");
+      print_r("$theUri2\n");
     }
     if (isset($parts2['scheme']) || isset($parts2['host']))
     {
