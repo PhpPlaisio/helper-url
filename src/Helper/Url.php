@@ -25,6 +25,7 @@ class Url
     {
       print_r("\nParts2 not array\n");
       print_r("$theUri2\n");
+      var_dump($parts2);
     }
     if (isset($parts2['scheme']) || isset($parts2['host']))
     {
