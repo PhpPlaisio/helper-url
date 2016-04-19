@@ -1,0 +1,7 @@
+.idea/
+bin/phing
+bin/phpunit
+composer.lock
+test/report
+test/coverage.xml
+vendor/

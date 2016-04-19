@@ -1,0 +1,18 @@
+<project name="ABC-Framework: HTML Helper" default="build" basedir=".">
+    <!-- Run composer update and executes various other updates -->
+    <target name="composer-update">
+        <exec command="composer update" checkreturn="true" passthru="true"/>
+    </target>
+
+    <!-- Runs ApiGen -->
+    <target name="apigen">
+        <exec command="apigen generate --todo --tree --source src --destination doc" passthru="true"
+              checkreturn="true"/>
+    </target>
+
+    <!-- Runs all unit tests -->
+    <target name="unit">
+        <exec command="bin/phpunit" passthru="true" checkreturn="true"/>
+    </target>
+    <target name="build"/>
+</project>

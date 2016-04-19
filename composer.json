@@ -1,0 +1,24 @@
+{
+  "name": "setbased/abc-url",
+  "description": "ABC-Framework: URL",
+  "keywords": [
+    "Framework"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "require-dev": {
+    "phing/phing": "2.*",
+    "phpunit/phpunit": ">=4.0.0"
+  },
+  "require": {
+    "php": ">=5.4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "SetBased\\Abc\\Helper\\": "src/"
+    }
+  },
+  "config": {
+    "bin-dir": "bin"
+  }
+}

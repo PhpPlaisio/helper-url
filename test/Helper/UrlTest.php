@@ -25,7 +25,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
    */
   public function testIsRelative2()
   {
-    $tests = ['//', '/\\', 'https://www.setbased.nl'];
+    $tests = ['', '//', '/\\', 'https://www.setbased.nl'];
 
     foreach ($tests as $test)
     {

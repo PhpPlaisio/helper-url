@@ -118,7 +118,7 @@ class Url
    */
   public static function isRelative($theUrl)
   {
-    if (is_string($theUrl) && $theUrl!='')
+    if (is_scalar($theUrl) && $theUrl!='')
     {
       return ((mb_substr($theUrl, 0, 1)=='/' &&
           (mb_strlen($theUrl)==1 || (mb_substr($theUrl, 1, 1)!='/' && mb_substr($theUrl, 1, 1)!='\\'))) ||
@@ -140,7 +140,7 @@ class Url
   {
     // With thanks to monkeysuffrage, see https://github.com/monkeysuffrage/phpuri/blob/master/phpuri.php.
 
-    if (empty($thePath))
+    if (!is_scalar($thePath) || $thePath=='')
     {
       return '';
     }
