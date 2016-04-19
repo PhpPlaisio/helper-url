@@ -1,4 +1,4 @@
-<project name="ABC-Framework: HTML Helper" default="build" basedir=".">
+<project name="ABC-Framework: URL" default="build" basedir=".">
     <!-- Run composer update and executes various other updates -->
     <target name="composer-update">
         <exec command="composer update" checkreturn="true" passthru="true"/>
