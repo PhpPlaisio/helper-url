@@ -4,7 +4,7 @@ namespace SetBased\Abc\Helper;
 
 //----------------------------------------------------------------------------------------------------------------------
 /**
- * Static class with helper functions for manipulating URLs.
+ * Utility class with functions for manipulating URLs.
  */
 class Url
 {
@@ -13,14 +13,14 @@ class Url
    * Combines two URIs to a single URL. In most cases the first URI will the an absolute URL and the second URI a
    * path and optionally a query.
    *
-   * @param string $theUri1 The first URI.
-   * @param string $theUri2 The second URI.
+   * @param string $uri1 The first URI.
+   * @param string $uri2 The second URI.
    *
    * @return string
    */
-  public static function combine($theUri1, $theUri2)
+  public static function combine($uri1, $uri2)
   {
-    $parts2 = parse_url($theUri2);
+    $parts2 = parse_url($uri2);
     if (isset($parts2['scheme']) || isset($parts2['host']))
     {
       // The second URI is an absolute URI. Take all parts from second URI.
@@ -31,7 +31,7 @@ class Url
     }
     else
     {
-      $parts1             = parse_url($theUri1);
+      $parts1             = parse_url($uri1);
       $combined_uri_parts = array_merge($parts1, $parts2);
 
       // Handle spacial cases for the path part of the URI.
@@ -112,17 +112,17 @@ class Url
    * * /\
    * * https://www.setbased.nl/
    *
-   * @param string $theUrl The URL.
+   * @param string $url The URL.
    *
    * @return bool
    */
-  public static function isRelative($theUrl)
+  public static function isRelative($url)
   {
-    if (is_scalar($theUrl) && $theUrl!='')
+    if (is_scalar($url) && $url!='')
     {
-      return ((mb_substr($theUrl, 0, 1)=='/' &&
-          (mb_strlen($theUrl)==1 || (mb_substr($theUrl, 1, 1)!='/' && mb_substr($theUrl, 1, 1)!='\\'))) ||
-        (mb_strlen($theUrl)>1 && mb_substr($theUrl, 0, 2)=='~/'));
+      return ((mb_substr($url, 0, 1)=='/' &&
+          (mb_strlen($url)==1 || (mb_substr($url, 1, 1)!='/' && mb_substr($url, 1, 1)!='\\'))) ||
+        (mb_strlen($url)>1 && mb_substr($url, 0, 2)=='~/'));
     }
 
     return false;
@@ -132,20 +132,20 @@ class Url
   /**
    * Normalize path to format with slashes only.
    *
-   * @param string $thePath
+   * @param string $path
    *
    * @return string
    */
-  public static function normalizePath($thePath)
+  public static function normalizePath($path)
   {
     // With thanks to monkeysuffrage, see https://github.com/monkeysuffrage/phpuri/blob/master/phpuri.php.
 
-    if (!is_scalar($thePath) || $thePath=='')
+    if (!is_scalar($path) || $path=='')
     {
       return '';
     }
 
-    $normalized_path = $thePath;
+    $normalized_path = $path;
     $normalized_path = preg_replace('`//+`', '/', $normalized_path, -1, $c0);
     $normalized_path = preg_replace('`^/\\.\\.?/`', '/', $normalized_path, -1, $c1);
     $normalized_path = preg_replace('`/\\.(/|$)`', '/', $normalized_path, -1, $c2);
@@ -159,70 +159,70 @@ class Url
   /**
    * Replaces in HTML code relative URLs with absolute URLs.
    *
-   * @param string $theHtml The HTML code.
-   * @param string $theRoot The part of the URLs before the path part without slash.
+   * @param string $html The HTML code.
+   * @param string $root The part of the URLs before the path part without slash.
    *
    * @return string
    */
-  public static function relative2Absolute($theHtml, $theRoot)
+  public static function relative2Absolute($html, $root)
   {
     return preg_replace("#(href|src)=(['\"])([^:'\"]*)(['\"]|(?:(?:%20|\\s|\\+)[^'\"]*))#",
-                        '$1=$2'.$theRoot.'$3$4',
-                        $theHtml);
+                        '$1=$2'.$root.'$3$4',
+                        $html);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Returns an URL based on the URL parts as returned by [parse_url](http://php.net/manual/function.parse-url.php).
    *
-   * @param array       $theParts         The URL parts.
-   * @param string|null $theDefaultScheme The scheme to be used when scheme is not in $theParts.
+   * @param array       $parts         The URL parts.
+   * @param string|null $defaultScheme The scheme to be used when scheme is not in $theParts.
    *
    * @return string
    */
-  public static function unParseUrl($theParts, $theDefaultScheme = null)
+  public static function unParseUrl($parts, $defaultScheme = null)
   {
-    if (!isset($theParts['scheme']) && !isset($theParts['host']) && isset($theParts['path']))
+    if (!isset($parts['scheme']) && !isset($parts['host']) && isset($parts['path']))
     {
-      $i = strpos($theParts['path'], '/');
+      $i = strpos($parts['path'], '/');
       if ($i===false)
       {
-        $theParts['host'] = $theParts['path'];
-        unset($theParts['path']);
+        $parts['host'] = $parts['path'];
+        unset($parts['path']);
       }
       else
       {
-        $theParts['host'] = substr($theParts['path'], 0, $i);
-        $theParts['path'] = substr($theParts['path'], $i);
+        $parts['host'] = substr($parts['path'], 0, $i);
+        $parts['path'] = substr($parts['path'], $i);
       }
     }
 
-    if (isset($theParts['scheme']))
+    if (isset($parts['scheme']))
     {
       // The scheme must be in lowercase.
-      $theParts['scheme'] = strtolower($theParts['scheme']);
+      $parts['scheme'] = strtolower($parts['scheme']);
     }
-    elseif (isset($theDefaultScheme))
+    elseif (isset($defaultScheme))
     {
-      $theParts['scheme'] = strtolower($theDefaultScheme);
+      $parts['scheme'] = strtolower($defaultScheme);
     }
 
     // We assume that all URLs must have a path except for 'mailto'.
-    if (!isset($theParts['path']) && isset($theParts['scheme']) && $theParts['scheme']!='mailto')
+    if (!isset($parts['path']) && isset($parts['scheme']) && $parts['scheme']!='mailto')
     {
-      $theParts['path'] = '/';
+      $parts['path'] = '/';
     }
 
     // Recompose the URL starting with the scheme.
-    if (isset($theParts['scheme']))
+    if (isset($parts['scheme']))
     {
-      if ($theParts['scheme']=='mailto')
+      if ($parts['scheme']=='mailto')
       {
         $url = 'mailto:';
       }
       else
       {
-        $url = $theParts['scheme'];
+        $url = $parts['scheme'];
         $url .= '://';
       }
     }
@@ -231,20 +231,20 @@ class Url
       $url = '';
     }
 
-    if (isset($theParts['pass']) && isset($theParts['user']))
+    if (isset($parts['pass']) && isset($parts['user']))
     {
-      $url .= $theParts['user'].':'.$theParts['pass'].'@';
+      $url .= $parts['user'].':'.$parts['pass'].'@';
     }
-    elseif (isset($theParts['user']))
+    elseif (isset($parts['user']))
     {
-      $url .= $theParts['user'].'@';
+      $url .= $parts['user'].'@';
     }
 
-    if (isset($theParts['host'])) $url .= $theParts['host'];
-    if (isset($theParts['port'])) $url .= ':'.$theParts['port'];
-    if (isset($theParts['path'])) $url .= $theParts['path'];
-    if (isset($theParts['query'])) $url .= '?'.$theParts['query'];
-    if (isset($theParts['fragment'])) $url .= '#'.$theParts['fragment'];
+    if (isset($parts['host'])) $url .= $parts['host'];
+    if (isset($parts['port'])) $url .= ':'.$parts['port'];
+    if (isset($parts['path'])) $url .= $parts['path'];
+    if (isset($parts['query'])) $url .= '?'.$parts['query'];
+    if (isset($parts['fragment'])) $url .= '#'.$parts['fragment'];
 
     return $url;
   }
