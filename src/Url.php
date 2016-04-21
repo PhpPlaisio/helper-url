@@ -43,6 +43,7 @@ class Url
       elseif (strpos($parts2['path'], '/')===0)
       {
         // Checking path in $uri2_parts and if path have '/', do nothing.
+        ;
       }
       else
       {
