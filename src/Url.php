@@ -17,6 +17,9 @@ class Url
    * @param string $uri2 The second URI.
    *
    * @return string
+   *
+   * @since 1.0.0
+   * @api
    */
   public static function combine($uri1, $uri2)
   {
@@ -115,6 +118,9 @@ class Url
    * @param string $url The URL.
    *
    * @return bool
+   *
+   * @since 1.0.0
+   * @api
    */
   public static function isRelative($url)
   {
@@ -135,6 +141,9 @@ class Url
    * @param string $path
    *
    * @return string
+   *
+   * @since 1.0.0
+   * @api
    */
   public static function normalizePath($path)
   {
@@ -163,6 +172,9 @@ class Url
    * @param string $root The part of the URLs before the path part without slash.
    *
    * @return string
+   *
+   * @since 1.0.0
+   * @api
    */
   public static function relative2Absolute($html, $root)
   {
@@ -179,6 +191,9 @@ class Url
    * @param string|null $defaultScheme The scheme to be used when scheme is not in $theParts.
    *
    * @return string
+   *
+   * @since 1.0.0
+   * @api
    */
   public static function unParseUrl($parts, $defaultScheme = null)
   {
