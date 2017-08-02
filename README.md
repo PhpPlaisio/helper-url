@@ -20,7 +20,6 @@
 </td>
 <td>
 <a href="https://packagist.org/packages/setbased/abc-url"><img src="https://poser.pugx.org/setbased/abc-url/v/stable" alt="Latest Stable Version"/></a><br/>
-<a href="https://www.versioneye.com/user/projects/5715e6d6fcd19a004544142b"><img src="https://www.versioneye.com/user/projects/5715e6d6fcd19a004544142b/badge.svg?style=flat" alt="Dependency Status"/></a>
 </td>
 <td>
 <a href="https://travis-ci.org/SetBased/php-abc-url"><img src="https://travis-ci.org/SetBased/php-abc-url.svg?branch=master" alt="Build Status"/></a><br/>
