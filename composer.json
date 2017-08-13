@@ -2,7 +2,8 @@
   "name": "setbased/abc-url",
   "description": "ABC-Framework: URL",
   "keywords": [
-    "Framework"
+    "ABC-Framework",
+    "URL"
   ],
   "type": "library",
   "license": "MIT",
