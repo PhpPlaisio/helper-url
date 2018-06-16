@@ -1,8 +1,7 @@
 <?php
-//----------------------------------------------------------------------------------------------------------------------
+
 namespace SetBased\Abc\Helper;
 
-//----------------------------------------------------------------------------------------------------------------------
 /**
  * Utility class with functions for manipulating URLs.
  */
@@ -21,7 +20,7 @@ class Url
    * @since 1.0.0
    * @api
    */
-  public static function combine($uri1, $uri2)
+  public static function combine(string $uri1, string $uri2): string
   {
     $parts2 = parse_url($uri2);
     if (isset($parts2['scheme']) || isset($parts2['host']))
@@ -123,9 +122,9 @@ class Url
    * @since 1.0.0
    * @api
    */
-  public static function isRelative($url)
+  public static function isRelative(string $url): bool
   {
-    if (is_scalar($url) && $url!='')
+    if ($url!=='')
     {
       return ((mb_substr($url, 0, 1)=='/' &&
           (mb_strlen($url)==1 || (mb_substr($url, 1, 1)!='/' && mb_substr($url, 1, 1)!='\\'))) ||
@@ -139,18 +138,18 @@ class Url
   /**
    * Normalize path to format with slashes only.
    *
-   * @param string $path
+   * @param string|null $path The path.
    *
    * @return string
    *
    * @since 1.0.0
    * @api
    */
-  public static function normalizePath($path)
+  public static function normalizePath(?string $path): string
   {
     // With thanks to monkeysuffrage, see https://github.com/monkeysuffrage/phpuri/blob/master/phpuri.php.
 
-    if (!is_scalar($path) || $path=='')
+    if ($path===null || $path==='')
     {
       return '';
     }
@@ -177,7 +176,7 @@ class Url
    * @since 1.0.0
    * @api
    */
-  public static function relative2Absolute($html, $root)
+  public static function relative2Absolute(string $html, string $root): string
   {
     return preg_replace("#(href|src)=(['\"])([^:'\"]*)(['\"]|(?:(?:%20|\\s|\\+)[^'\"]*))#",
                         '$1=$2'.$root.'$3$4',
@@ -196,7 +195,7 @@ class Url
    * @since 1.0.0
    * @api
    */
-  public static function unParseUrl($parts, $defaultScheme = null)
+  public static function unParseUrl(array $parts, ?string $defaultScheme = null): string
   {
     if (!isset($parts['scheme']) && !isset($parts['host']) && isset($parts['path']))
     {
