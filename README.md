@@ -26,7 +26,7 @@
 <a href="https://scrutinizer-ci.com/g/SetBased/php-abc-url/?branch=master"><img src="https://scrutinizer-ci.com/g/SetBased/php-abc-url/badges/coverage.png?b=master" alt="Code Coverage"/></a>
 </td>
 <td>
-<a href="https://scrutinizer-ci.com/g/SetBased/php-abc-url/?branch=master"><img src="https://scrutinizer-ci.com/g/SetBased/php-abc-url/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality"/></a><
+<a href="https://scrutinizer-ci.com/g/SetBased/php-abc-url/?branch=master"><img src="https://scrutinizer-ci.com/g/SetBased/php-abc-url/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality"/></a>
 </td>
 </tr>
 </tbody>
