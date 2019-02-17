@@ -1,16 +1,19 @@
 <?php
-//----------------------------------------------------------------------------------------------------------------------
+declare(strict_types=1);
+
 use PHPUnit\Framework\TestCase;
 use SetBased\Abc\Helper\Url;
 
-//----------------------------------------------------------------------------------------------------------------------
+/**
+ * Test cases for class Url.
+ */
 class UrlTest extends TestCase
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Test relative URLs.
    */
-  public function testIsRelative1()
+  public function testIsRelative1(): void
   {
     $tests = ['/', '/foo', '~/', '~/foo'];
 
@@ -24,7 +27,7 @@ class UrlTest extends TestCase
   /**
    * Test not relative URLs
    */
-  public function testIsRelative2()
+  public function testIsRelative2(): void
   {
     $tests = ['', '//', '/\\', 'https://www.setbased.nl'];
 
@@ -38,7 +41,7 @@ class UrlTest extends TestCase
   /**
    * Test for relative2Absolute.
    */
-  public function testRelative2Absolute()
+  public function testRelative2Absolute(): void
   {
     $cases = [];
 
@@ -82,7 +85,7 @@ class UrlTest extends TestCase
   /**
    * Test for combine.
    */
-  public function testCombine()
+  public function testCombine(): void
   {
     // With thanks to monkeysuffrage, see https://github.com/monkeysuffrage/phpuri/blob/master/test.php.
     $cases = [];

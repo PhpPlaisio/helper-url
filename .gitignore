@@ -1,7 +1,8 @@
-.idea/
-bin/phing
-bin/phpunit
-composer.lock
-test/report
-test/coverage.xml
-vendor/
+/.idea/
+/.phpunit.result.cache
+/bin/phing
+/bin/phpunit
+/composer.lock
+/test/report
+/test/coverage.xml
+/vendor/
