@@ -1,8 +1,10 @@
 <?php
 declare(strict_types=1);
 
+namespace Plaisio\Url\Test;
+
 use PHPUnit\Framework\TestCase;
-use SetBased\Abc\Helper\Url;
+use Plaisio\Helper\Url;
 
 /**
  * Test cases for class Url.

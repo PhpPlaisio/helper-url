@@ -1,28 +1,27 @@
 {
-  "name": "setbased/abc-url",
-  "description": "ABC-Framework: URL",
+  "name": "plaisio/url",
+  "description": "PhpPlaisio: URL",
   "keywords": [
-    "ABC-Framework",
+    "PhpPlaisio",
     "URL"
   ],
-  "type": "library",
   "license": "MIT",
-  "require-dev": {
-    "phing/phing": "^2.0.0",
-    "phpunit/phpunit": "^7.0.0 || ^8.0.0"
-  },
   "require": {
     "php": ">=7.1.0",
     "ext-mbstring": "*"
   },
+  "require-dev": {
+    "phing/phing": "^2.0.0",
+    "phpunit/phpunit": "^7.0.0 || ^8.0.0"
+  },
   "autoload": {
     "psr-4": {
-      "SetBased\\Abc\\Helper\\": "src/"
+      "Plaisio\\Helper\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "SetBased\\Abc\\Helper\\Test\\": "test/"
+      "Plaisio\\Helper\\Test\\": "test/"
     }
   },
   "config": {

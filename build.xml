@@ -1,13 +1,7 @@
-<project name="ABC-Framework" default="build" basedir=".">
+<project name="PhpPlaisio" default="build" basedir=".">
     <!-- Run composer update and executes various other updates -->
     <target name="composer-update">
         <exec command="composer update" checkreturn="true" passthru="true"/>
-    </target>
-
-    <!-- Runs ApiGen -->
-    <target name="apigen">
-        <exec command="apigen generate --todo --tree --source src --destination doc" passthru="true"
-              checkreturn="true"/>
     </target>
 
     <!-- Run composer update -->

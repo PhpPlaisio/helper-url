@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace SetBased\Abc\Helper;
+namespace Plaisio\Helper;
 
 /**
  * Utility class with functions for manipulating URLs.
