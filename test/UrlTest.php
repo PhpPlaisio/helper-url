@@ -87,7 +87,7 @@ class UrlTest extends TestCase
   /**
    * Test for combine.
    */
-  public function testCombine(): void
+  public function testCombine1(): void
   {
     // With thanks to monkeysuffrage, see https://github.com/monkeysuffrage/phpuri/blob/master/test.php.
     $cases = [];
@@ -134,6 +134,19 @@ class UrlTest extends TestCase
       $url = Url::combine('http://a/b/c/d;p?q', $case['relative']);
       $this->assertEquals($case['result'], $url);
     }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test for combine.
+   */
+  public function testCombine2(): void
+  {
+    $url = Url::combine('http://a/b/c/d;p', '#');
+    $this->assertEquals('http://a/b/c/d;p', $url);
+
+    $url = Url::combine('http://a/b/c/d;p', '#help');
+    $this->assertEquals('http://a/b/c/d;p#help', $url);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

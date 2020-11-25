@@ -46,7 +46,7 @@ class Url
       elseif (strpos($parts2['path'], '/')===0)
       {
         // Checking path in $uri2_parts and if path have '/', do nothing.
-        ;
+        unset($void);
       }
       else
       {
@@ -72,7 +72,7 @@ class Url
       {
         if (!isset($parts2['query']))
         {
-          $combined_uri_parts['query'] = $parts1['query'];
+          $combined_uri_parts['query'] = $parts1['query'] ?? null;
         }
       }
       elseif (strpos($parts2['path'], '/')===0)
