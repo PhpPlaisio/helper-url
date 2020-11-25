@@ -1,7 +1,6 @@
 /.idea/
 /.phpunit.result.cache
-/bin/phing
-/bin/phpunit
+/bin/
 /composer.lock
 /test/report
 /test/coverage.xml
