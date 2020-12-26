@@ -138,7 +138,7 @@ class UrlTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test for combine.
+   * Test for combine fragments.
    */
   public function testCombine2(): void
   {
@@ -147,6 +147,9 @@ class UrlTest extends TestCase
 
     $url = Url::combine('http://a/b/c/d;p', '#help');
     $this->assertEquals('http://a/b/c/d;p#help', $url);
+
+    $url = Url::combine('http://a/b/c/d;p#help', '/e');
+    $this->assertEquals('http://a/e', $url);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

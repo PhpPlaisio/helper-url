@@ -99,6 +99,12 @@ class Url
       }
     }
 
+    // Handle spacial cases for the fragment part of the URI.
+    if (!isset($parts2['fragment']))
+    {
+      $combined_uri_parts['fragment'] = null;
+    }
+
     return self::unParseUrl($combined_uri_parts);
   }
 
