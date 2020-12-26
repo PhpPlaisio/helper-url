@@ -100,7 +100,7 @@ class Url
     }
 
     // Handle spacial cases for the fragment part of the URI.
-    if (!isset($parts2['fragment']))
+    if (($parts2['fragment'] ?? '')==='')
     {
       $combined_uri_parts['fragment'] = null;
     }
