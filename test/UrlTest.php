@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Plaisio\Url\Test;
+namespace Plaisio\Helper\Test;
 
 use PHPUnit\Framework\TestCase;
 use Plaisio\Helper\Url;

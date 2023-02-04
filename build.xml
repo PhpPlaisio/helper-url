@@ -1,17 +1,26 @@
 <project name="PhpPlaisio" default="build" basedir=".">
-    <!-- Run composer update and executes various other updates -->
-    <target name="composer-update">
-        <exec command="composer update" checkreturn="true" passthru="true"/>
-    </target>
-
+    <!-- Update dependencies -->
     <target name="update">
-        <!-- Run composer update -->
         <exec executable="composer" checkreturn="true" passthru="true">
             <arg value="--ansi"/>
             <arg value="update"/>
         </exec>
 
-        <!-- Show outdated packages -->
+        <phing phingfile="build.xml" target="outdated" haltonfailure="true"/>
+    </target>
+
+    <!-- Install dependencies -->
+    <target name="install">
+        <exec executable="composer" checkreturn="true" passthru="true">
+            <arg value="--ansi"/>
+            <arg value="install"/>
+        </exec>
+
+        <phing phingfile="build.xml" target="outdated" haltonfailure="true"/>
+    </target>
+
+    <!-- Show outdated dependencies -->
+    <target name="outdated">
         <exec executable="composer" checkreturn="true" passthru="true">
             <arg value="--ansi"/>
             <arg value="outdated"/>
@@ -21,7 +30,8 @@
 
     <!-- Runs all unit tests -->
     <target name="unit">
-        <exec command="bin/phpunit" passthru="true" checkreturn="true"/>
+        <exec executable="bin/phpunit" passthru="true" checkreturn="true"/>
     </target>
+
     <target name="build"/>
 </project>

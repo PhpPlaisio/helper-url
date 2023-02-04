@@ -110,7 +110,7 @@ class Url
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns true if and only if an URL is a relative URL.
+   * Returns true if and only if a URL is a relative URL.
    *
    * Examples of relative URLs:
    * * /
