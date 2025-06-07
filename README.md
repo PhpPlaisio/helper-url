@@ -7,7 +7,6 @@
 <th>Legal</th>
 <th>Release</th>
 <th>Tests</th>
-<th>Code</th>
 </tr>
 </thead>
 <tbody>
@@ -24,9 +23,6 @@
 <td>
 <a href="https://github.com/PhpPlaisio/helper-url/actions/workflows/unit.yml"><img src="https://github.com/PhpPlaisio/helper-url/actions/workflows/unit.yml/badge.svg" alt="Build Status"/></a><br/>
 <a href="https://codecov.io/gh/PhpPlaisio/helper-url"><img src="https://codecov.io/gh/PhpPlaisio/helper-url/branch/master/graph/badge.svg" alt="Code Coverage"/></a>
-</td>
-<td>
-<a href="https://scrutinizer-ci.com/g/PhpPlaisio/helper-url/?branch=master"><img src="https://scrutinizer-ci.com/g/PhpPlaisio/helper-url/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality"/></a>
 </td>
 </tr>
 </tbody>
