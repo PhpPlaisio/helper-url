@@ -17,4 +17,10 @@
             <directory>src</directory>
         </include>
     </source>
+    <coverage>
+        <report>
+            <clover outputFile="test/coverage.xml"/>
+            <html outputDirectory="test/report"/>
+        </report>
+    </coverage>
 </phpunit>

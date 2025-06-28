@@ -10,7 +10,7 @@ class Url
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Combines two URIs to a single URL. In most cases the first URI will the an absolute URL and the second URI a
+   * Combines two URIs to a single URL. In most cases, the first URI will be an absolute URL and the second URI a
    * path and optionally a query.
    *
    * @param string $uri1 The first URI.
@@ -29,7 +29,7 @@ class Url
       // The second URI is an absolute URI. Take all parts from second URI.
       $combined_uri_parts = $parts2;
 
-      // The scheme might by omitted. The default scheme is http.
+      // The scheme might be omitted. The default scheme is http.
       if (!isset($combined_uri_parts['scheme'])) $combined_uri_parts['scheme'] = 'http';
     }
     else
@@ -40,31 +40,31 @@ class Url
       // Handle spacial cases for the path part of the URI.
       if (!isset($parts2['path']))
       {
-        // Checking path in $uri2_parts and if path is empty, getting path from $_uri using [normalize_path]
+        // Checking the path in $uri2_parts and if the path is empty, getting the path from $uri using [normalize_path]
         $combined_uri_parts['path'] = self::normalizePath($parts1['path']);
       }
-      elseif (strpos($parts2['path'], '/')===0)
+      elseif (str_starts_with($parts2['path'], '/'))
       {
-        // Checking path in $uri2_parts and if path have '/', do nothing.
+        // Checking the path in $uri2_parts and if the path has '/', do nothing.
         unset($void);
       }
       else
       {
-        // Else create path using $_uri['path'] and $uri2_parts['path']. With using [normalize_path].
-        $_path = $parts1['path'];
-        if (strpos($_path, '/')===false)
+        // Else create path using $uri['path'] and $uri2_parts['path']. With using [normalize_path].
+        $path = $parts1['path'];
+        if (!str_contains($path, '/'))
         {
-          $_path = '';
+          $path = '';
         }
         else
         {
-          $_path = preg_replace('/\/[^\/]+$/', '/', $_path);
+          $path = preg_replace('/\/[^\/]+$/', '/', $path);
         }
-        if (!isset($_path) && !isset($parts1['host']))
+        if (!isset($path) && !isset($parts1['host']))
         {
-          $_path = '/';
+          $path = '/';
         }
-        $combined_uri_parts['path'] = self::normalizePath($_path.$parts2['path']);
+        $combined_uri_parts['path'] = self::normalizePath($path.$parts2['path']);
       }
 
       // Handle spacial cases for the query part of the URI.
@@ -75,7 +75,7 @@ class Url
           $combined_uri_parts['query'] = $parts1['query'] ?? null;
         }
       }
-      elseif (strpos($parts2['path'], '/')===0)
+      elseif (str_starts_with($parts2['path'], '/'))
       {
         if (isset($parts2['query']))
         {
@@ -143,7 +143,7 @@ class Url
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Normalize path to format with slashes only.
+   * Normalize the path to format with slashes only.
    *
    * @param string|null $path The path.
    *
@@ -166,14 +166,14 @@ class Url
     $normalized_path = preg_replace('`^/\\.\\.?/`', '/', $normalized_path, -1, $c1);
     $normalized_path = preg_replace('`/\\.(/|$)`', '/', $normalized_path, -1, $c2);
     $normalized_path = preg_replace('`/[^/]*?/\\.\\.(/|$)`', '/', $normalized_path, 1, $c3);
-    $_num_matches    = $c0 + $c1 + $c2 + $c3;
+    $num_matches    = $c0 + $c1 + $c2 + $c3;
 
-    return ($_num_matches>0) ? self::normalizePath($normalized_path) : $normalized_path;
+    return ($num_matches>0) ? self::normalizePath($normalized_path) : $normalized_path;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Replaces in HTML code relative URLs with absolute URLs.
+   * Replaces relative URLs with absolute URLs in HTML code.
    *
    * @param string $html The HTML code.
    * @param string $root The part of the URLs before the path part without slash.
@@ -192,7 +192,7 @@ class Url
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns an URL based on the URL parts as returned by [parse_url](http://php.net/manual/function.parse-url.php).
+   * Returns a URL based on the URL parts as returned by [parse_url](http://php.net/manual/function.parse-url.php).
    *
    * @param array       $parts         The URL parts.
    * @param string|null $defaultScheme The scheme to be used when scheme is not in $theParts.
